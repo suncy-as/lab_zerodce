@@ -6,7 +6,6 @@ import numpy as np
 from PIL import Image
 import glob
 import random
-import cv2
 import tifffile as tiff
 
 random.seed(1143)    # 6
@@ -18,11 +17,14 @@ def get_img(path):    #读取tiff格式和其它格式图片，主要为3维16�
     if 'tif' in path:
         img = tiff.imread(path)
     else:
-        img = cv2.imread(path, cv2.IMREAD_UNCHANGED)
+        img = 0
+        print('文件格式好像有问题不是tiff')
     img = torch.tensor(img/65536)
+    
 #     img = img[np.newaxis,:,:,:]                      
     
-    img = img[np.newaxis, 0:64, 0:64, 0:64]                      # 为了减少运行内存只能这样写了
+    img = img[np.newaxis, 0:64, :, :]                      # 为了减少运行内存只能这样写了
+    print('img.shape:{}'.format(img.shape))
 #     img = img.permute(2, 0, 1)
 #     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")    
 #     img = img.to(device)

@@ -4,6 +4,7 @@ import torch.nn.functional as F
 import math
 from torchvision.models.vgg import vgg16
 import numpy as np
+torch.set_default_dtype(torch.float64)
 
 
 class L_color(nn.Module):
@@ -134,7 +135,7 @@ class L_exp(nn.Module):
         x = torch.mean(x,1,keepdim=True)
         mean = self.pool(x)
 
-        d = torch.mean(torch.pow(mean- torch.FloatTensor([self.mean_val] ).cuda(),2))
+        d = torch.mean(torch.pow(mean- torch.DoubleTensor([self.mean_val] ).cuda(),2))
         return d
         
         
