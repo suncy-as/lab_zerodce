@@ -30,10 +30,10 @@ class L_spa(nn.Module):
     def __init__(self):
         super(L_spa, self).__init__()
         # print(1)kernel = torch.FloatTensor(kernel).unsqueeze(0).unsqueeze(0)
-        kernel_left = torch.FloatTensor( [[0,0,0],[-1,1,0],[0,0,0]]).cuda().unsqueeze(0).unsqueeze(0)
-        kernel_right = torch.FloatTensor( [[0,0,0],[0,1,-1],[0,0,0]]).cuda().unsqueeze(0).unsqueeze(0)
-        kernel_up = torch.FloatTensor( [[0,-1,0],[0,1, 0 ],[0,0,0]]).cuda().unsqueeze(0).unsqueeze(0)
-        kernel_down = torch.FloatTensor( [[0,0,0],[0,1, 0],[0,-1,0]]).cuda().unsqueeze(0).unsqueeze(0)
+        kernel_left = torch.DoubleTensor( [[0,0,0],[-1,1,0],[0,0,0]]).cuda().unsqueeze(0).unsqueeze(0)
+        kernel_right = torch.DoubleTensor( [[0,0,0],[0,1,-1],[0,0,0]]).cuda().unsqueeze(0).unsqueeze(0)
+        kernel_up = torch.DoubleTensor( [[0,-1,0],[0,1, 0 ],[0,0,0]]).cuda().unsqueeze(0).unsqueeze(0)
+        kernel_down = torch.DoubleTensor( [[0,0,0],[0,1, 0],[0,-1,0]]).cuda().unsqueeze(0).unsqueeze(0)
         self.weight_left = nn.Parameter(data=kernel_left, requires_grad=False)
         self.weight_right = nn.Parameter(data=kernel_right, requires_grad=False)
         self.weight_up = nn.Parameter(data=kernel_up, requires_grad=False)
@@ -48,8 +48,8 @@ class L_spa(nn.Module):
         org_pool =  self.pool(org_mean)
         enhance_pool = self.pool(enhance_mean)
 
-        weight_diff =torch.max(torch.FloatTensor([1]).cuda() + 10000*torch.min(org_pool - torch.FloatTensor([0.3]).cuda(),torch.FloatTensor([0]).cuda()),torch.FloatTensor([0.5]).cuda())
-        E_1 = torch.mul(torch.sign(enhance_pool - torch.FloatTensor([0.5]).cuda()) ,enhance_pool-org_pool)
+        weight_diff =torch.max(torch.DoubleTensor([1]).cuda() + 10000*torch.min(org_pool - torch.DoubleTensor([0.3]).cuda(),torch.DoubleTensor([0]).cuda()),torch.DoubleTensor([0.5]).cuda())
+        E_1 = torch.mul(torch.sign(enhance_pool - torch.DoubleTensor([0.5]).cuda()) ,enhance_pool-org_pool)
 
 
         D_org_letf = F.conv2d(org_pool , self.weight_left, padding=1)
@@ -83,7 +83,7 @@ class L_exp(nn.Module):
         x = torch.mean(x,1,keepdim=True)
         mean = self.pool(x)
 
-        d = torch.mean(torch.pow(mean- torch.FloatTensor([self.mean_val] ).cuda(),2))
+        d = torch.mean(torch.pow(mean- torch.DoubleTensor([self.mean_val] ).cuda(),2))
         return d
         
 class L_TV(nn.Module):
@@ -92,7 +92,6 @@ class L_TV(nn.Module):
         self.TVLoss_weight = TVLoss_weight
 
     def forward(self,x):
-        print('L_TV.size:{}'.format(x.size()))
         batch_size = x.size()[0]
         h_x = x.size()[2]
         w_x = x.size()[3]
@@ -105,7 +104,7 @@ class L_TV(nn.Module):
 class Sa_Loss(nn.Module):
     def __init__(self):
         super(Sa_Loss, self).__init__()
-        # print(1)
+        # print(1)FloatTensor
     def forward(self, x ):
         # self.grad = np.ones(x.shape,dtype=np.float32)
         b,c,h,w = x.shape

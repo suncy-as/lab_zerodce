@@ -23,8 +23,7 @@ def get_img(path):    #读取tiff格式和其它格式图片，主要为3维16�
     
 #     img = img[np.newaxis,:,:,:]                      
     
-    img = img[np.newaxis, 0:64, :, :]                      # 为了减少运行内存只能这样写了
-    print('img.shape:{}'.format(img.shape))
+    img = img[np.newaxis, :, :]                      # 为了减少运行内存只能这样写了
 #     img = img.permute(2, 0, 1)
 #     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")    
 #     img = img.to(device)
